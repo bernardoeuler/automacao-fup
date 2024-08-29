@@ -2,5 +2,4 @@ bs4
 pyautogui
 pyperclip
 python-dotenv
-pywin32
 requests

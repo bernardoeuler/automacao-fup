@@ -2,7 +2,6 @@ import pyautogui
 import pyperclip
 import subprocess
 from time import sleep
-from utils.clipboard import getClipboard
 from utils.webscraping import getElement
 from utils.filehandling import createPythonFile
 
@@ -38,15 +37,15 @@ pyautogui.press("enter")
 for i in range(quantity):
     pyautogui.hotkey("alt", "d")
     pyperclip.copy(f"{url}&page={i}")
-    url = getClipboard()
+    url = pyperclip.paste()
     pyautogui.hotkey("ctrl", "v")
     pyautogui.press("enter")
-    if pause > 0: 
+    if pause > 0:
         sleep(pause)
     pyautogui.hotkey("ctrl", "u")
     pyautogui.hotkey("ctrl", "a")
     pyautogui.hotkey("ctrl", "c")
-    html = getClipboard()
+    html = pyperclip.paste()
     code = getElement(html, "textarea", "class", "coderunner-answer")[0].text.strip()
     createPythonFile(code, f"Tarefa {number}/{i + 1}.py")
     pyautogui.hotkey("ctrl", "w")
