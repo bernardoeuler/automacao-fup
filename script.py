@@ -1,3 +1,5 @@
+import os
+import sys
 import pyautogui
 import pyperclip
 import subprocess
@@ -47,7 +49,20 @@ for i in range(quantity):
     pyautogui.hotkey("ctrl", "c")
     html = pyperclip.paste()
     code = getElement(html, "textarea", "class", "coderunner-answer")[0].text.strip()
-    createPythonFile(code, f"Tarefa {number}/{i + 1}.py")
+    try:
+        if sys.platform.startswith("win"):
+            home_dir = os.environ["USERPROFILE"]
+            destination_dir = os.path.join(home_dir, "Downloads", f"Tarefa {number}")
+            os.mkdir(destination_dir)
+
+        elif sys.platform.startswith("linux"):
+            home_dir = os.environ["USERPROFILE"]
+            destination_dir = os.path.join(home_dir, f"Tarefa {number}")
+            os.mkdir(destination_dir)
+    except FileExistsError:
+        pass
+
+    createPythonFile(code, os.path.join(destination_dir, f"{i + 1}.py"))
     pyautogui.hotkey("ctrl", "w")
 
 subprocess.Popen(f'ruff format \"Tarefa {number}\"', shell=True)
